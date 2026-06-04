@@ -25,3 +25,30 @@ The core objective is to run chronological backtests to optimize predictive para
 ├── main.py                      # Daily analysis script to generate betting action
 ├── requirements.txt             # Project dependencies (MLB-StatsAPI, pandas, etc.)
 └── README.md
+```
+
+## ⚙️ The Mathematical & Predictive Logic
+
+The core calculation normalizes a team's raw scoring average per inning by evaluating their opponent's specific environmental performance.
+
+### Step 1: Point-in-Time Statistics
+For any simulated date $D$, the model calculates a team's rolling average for an inning ($I$) and the opponent's venue-specific win percentage using *only* games played prior to date $D$.
+
+### Step 2: Weighting for Matchup Difficulty
+To account for strength of schedule, raw scoring averages are adjusted using the opponent’s Home or Away win percentage ($WP_{opp}$):
+
+$$\text{Weighted Score} = \text{Raw Inning Avg} \times \left(1 + \left(WP_{opp} - 0.5\right)\right)$$
+
+* **Tough Road Opponent ($WP_{opp} = 0.600$):** Grants a $+10\%$ boost to the scoring projection, valuing runs earned against premier teams higher.
+* **Weak Road Opponent ($WP_{opp} = 0.350$):** Applies a $-15\%$ penalty, deflating stats padded against weaker teams.
+
+---
+
+## 🚀 Getting Started
+
+### 1. Installation & Environment Setup
+Clone the repository and install the necessary data science libraries:
+```bash
+git clone [https://github.com/YOUR_USERNAME/mlb-inning-backtester.git](https://github.com/YOUR_USERNAME/mlb-inning-backtester.git)
+cd mlb-inning-backtester
+pip install -r requirements.txt
