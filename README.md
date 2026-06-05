@@ -1,5 +1,4 @@
-# MLB-InnBet
-## MLB Quantitative Analytics & Predictive Inning Engine
+# MLB Quantitative Analytics & Predictive Inning Engine
 A decoupled desktop application and backtesting framework that parses live MLB data streams to isolate situational performance splits and compute portfolio stake sizes using the Kelly Criterion framework.
 
 ## 📌 Project Overview
