@@ -1,5 +1,6 @@
 # MLB-InnBet
-An algorithmic baseball analytics engine built to isolate and evaluate betting trends across specific game frames (Innings 2–6). The system dynamically fetches live game data via the MLB Stats API, builds historical snapshots, and simulates seasonal rolling backtests to optimize predictive weights.
+## MLB Quantitative Analytics & Predictive Inning Engine
+A decoupled desktop application and backtesting framework that parses live MLB data streams to isolate situational performance splits and compute portfolio stake sizes using the Kelly Criterion framework.
 
 ## 📌 Project Overview
 Unlike traditional full-game or first-inning (NRFI/YRFI) models, this project isolates the middle-inning "meat" of the game where starting pitchers face lineups for the 2nd/3rd time and bullpens begin to emerge. 
