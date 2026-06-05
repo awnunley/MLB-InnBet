@@ -15,7 +15,7 @@ The core objective is to run chronological backtests to optimize predictive para
 * **Automated Capital Allocation:** Built-in risk-mitigation framework running fractional Kelly Criterion calculations to safeguard portfolio management.
 
 ### Application Preview
-_Place a screenshot or a brief GIF of your Tkinter interface running here to demonstrate frontend implementation._
+![Alt text](/preview.png?raw=true "Preview")
 
 ## System Architecture
 ### 1. Data Pipeline & Snapshot Matrix (`OverUnder2.py`)
