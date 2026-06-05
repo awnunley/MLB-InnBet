@@ -6,45 +6,39 @@ Unlike traditional full-game or first-inning (NRFI/YRFI) models, this project is
 
 The core objective is to run chronological backtests to optimize predictive parameters, discovering the most profitable range of coefficients when adjusting a team's scoring averages against their opponent's rolling defensive/stadium strength.
 
-### Key Features
-* **Granular Data Pipeline:** Custom scripts to pull and map inning-by-inning performance ($Innings\ 2-6$).
-* **Rolling Point-in-Time Backtester:** Simulates past days of the season chronologically using *only* the data available on that specific morning to prevent future-data leakage.
-* **Strength-of-Schedule Weighting:** Adjusts team offensive averages dynamically based on opponent Home/Away win percentages.
-* **Forthcoming GUI Dashboard:** A visual control panel to easily tweak model thresholds, input custom weights, and view daily action items.
+
+## Features
+
+* **Real-Time Data Ingestion:** Automates live daily game slate pulling and hydrates active roster matchups directly through the MLB stats API wrapper.
+* **Asynchronous Execution UI:** Background threading worker prevents application lockups, maintaining a responsive user interface during network-heavy I/O operations.
+* **Dynamic Parameterized Backtesting:** Features a historical grid-search simulation engine to evaluate and isolate high-performing operational split thresholds.
+* **Automated Capital Allocation:** Built-in risk-mitigation framework running fractional Kelly Criterion calculations to safeguard portfolio management.
+
+### Application Preview
+_Place a screenshot or a brief GIF of your Tkinter interface running here to demonstrate frontend implementation._
+
+## System Architecture
+### 1. Data Pipeline & Snapshot Matrix (`OverUnder2.py`)
+The core processing script functions as an automated data pipeline that operates directly on live data frames and memory streams:
+* **Dynamic Platoon Split Compilation:** Instead of relying on static, flat-rate season averages, the engine dynamically builds situational splits (e.g., Target Inning performance isolated by facing RHP vs LHP) directly from the master dataset (`mlb_initial_load.json`).
+* **Live Ingest & Hydration:** Utilizes `statsapi` to query the daily schedule payload, programmatically extracting upcoming matchups and hydrating individual starting pitcher profiles to pull throw-hand codes (`L` / `R`) in real-time.
+* **Quant Matrix Formula:** Implements a parameterized weighting matrix that adjusts raw team averages against opponent win percentages using strict, hyperparameter-optimized thresholds ($Crit > 0.75$ and $Crit < 0.25$) verified during historical backtesting.
+* **Risk Management Engine:** Automatically passes calculated win probabilities into a half-Kelly criterion allocation algorithm to generate defensive stake sizing recommendations based on target user bankrolls and real-time bookmaker decimal odds multipliers.
+
+### 2. Presentation Layer & Concurrency Engine (`dashboard.py`)
+The user interface is built as an asynchronous desktop dashboard utilizing Python’s native structural layout patterns:
+* **Asynchronous Multithreading:** To avoid the common pitfall of a frozen GUI during high-latency network requests, the interface isolates live API scraping and calculations to a dedicated background worker thread (`threading.Thread`).
+* **Thread-Safe Presentation Intercept:** The worker thread securely schedules UI updates back to the main thread via Tkinter's safe scheduling loop (`root.after`), preventing thread race conditions and ensuring deterministic UI element updates.
+* **State-Driven Treeview & Styling:** Leverages `ttk.Treeview` spreadsheet elements and hierarchical style maps to dynamically intercept calculations. It applies distinct CSS-like hexadecimal tags to visually isolate active edge plays (soft green) from dead matchups, making operational data immediately actionable.
+
+### 3. Hyperparameter Optimization & Backtester (`backtest.py`)
+The "training" and verification ground of the algorithm acts as a historical simulation sandbox:
+* **Combinatorial Hyperparameter Grid Search:** Employs nested iterative loops (`itertools.product`) to test combinations of performance weights across historical spans.
+* **Algorithmic Validation:** Simulates past game scenarios to cross-examine what the mathematical matrix *would* have recommended against the actual boxscore outcomes, protecting model integrity and isolating highly profitable calculation sub-windows.
 
 ---
 
-## 🗂 Repository Structure
-```text
-├── data/
-│   └── mlb_initial_load.json    # Local master database of season history
-├── scripts/
-│   ├── initial_load.py          # Builds/rebuilds the master JSON from scratch
-│   ├── update.py                # Daily pipeline to pull the latest final box scores
-│   └── backtester.py            # Chronological simulation engine for weight optimization
-├── main.py                      # Daily analysis script to generate betting action
-├── requirements.txt             # Project dependencies (MLB-StatsAPI, pandas, etc.)
-└── README.md
-```
-
-## ⚙️ The Mathematical & Predictive Logic
-
-The core calculation normalizes a team's raw scoring average per inning by evaluating their opponent's specific environmental performance.
-
-### Step 1: Point-in-Time Statistics
-For any simulated date $D$, the model calculates a team's rolling average for an inning ($I$) and the opponent's venue-specific win percentage using *only* games played prior to date $D$.
-
-### Step 2: Weighting for Matchup Difficulty
-To account for strength of schedule, raw scoring averages are adjusted using the opponent’s Home or Away win percentage ($WP_{opp}$):
-
-$$\text{Weighted Score} = \text{Raw Inning Avg} \times \left(1 + \left(WP_{opp} - 0.5\right)\right)$$
-
-* **Tough Road Opponent ($WP_{opp} = 0.600$):** Grants a $+10\%$ boost to the scoring projection, valuing runs earned against premier teams higher.
-* **Weak Road Opponent ($WP_{opp} = 0.350$):** Applies a $-15\%$ penalty, deflating stats padded against weaker teams.
-
----
-
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Installation & Environment Setup
 Clone the repository and install the necessary data science libraries:
